@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lab5</title>
+    <style>
+        .code-block {
+            background-color: #f3f3f3;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="zvit">
+        <h1> Крамар Микита ІО-1613 Лабораторна робота 5</h1>
+        <h2>Тема:  ФУНКЦІОНАЛЬНЕ ЗАСТОСУВАННЯ JAVASCRIPT У HTML-ДОКУМЕНТІ. 
+            ВИКОРИСТАННЯ МАСИВІВ У JS-СЦЕНАРІЯХ. РЕАЛІЗАЦІЯ ПРОГРАМ ЗАСОВАМИ МОВИ JAVASCRIPT            
+            </h2>
+
+        <h2>Мета: придбати практичні навички роботи з масивами у js-сценаріях.  Реалізація програм засовами мови JAVASCRIPT
+            </h2>
+    </div>
+
+    <div class="zadannya1">
+        <h1>Масив</h1>
+        <label for="size">Введіть розмір масива:</label>
+        <input type="number" id="size" min="1">
+        <button onclick="performOperations()">старт</button>
+
+        <h2>Results</h2>
+        <div id="results"></div>
+
+        <script>
+function performOperations() {
+    const size = parseInt(document.getElementById('size').value);
+    if (isNaN(size) || size < 1) {
+        alert('Будь ласка, введіть допустиме число більше 0.');
+        return;
+    }
+
+    let array1 = generateRandomArray(size);
+    let array2 = generateRandomArray(size);
+
+    displayArray('Масив 1:', array1);
+    displayArray('Масив 2:', array2);
+
+    let smallestCommonElement = findSmallestCommonElement(array1, array2);
+    displayResult('Найменший спільний елемент:', smallestCommonElement);
+
+    let sortedArray1 = bubbleSort([...array1]);
+    displayArray('Відсортований Масив 1:', sortedArray1);
+
+    let sortedArray2 = bubbleSort([...array2]);
+    displayArray('Відсортований Масив 2:', sortedArray2);
+}
+
+function generateRandomArray(size) {
+    let array = [];
+    for (let i = 0; i < size; i++) {
+        array.push(Math.floor(Math.random() * 100));
+    }
+    return array;
+}
+
+function displayArray(title, array) {
+    const resultsDiv = document.getElementById('results');
+    let div = document.createElement('div');
+    div.innerHTML = `<strong>${title}</strong> ${array.join(', ')}`;
+    resultsDiv.appendChild(div);
+}
+
+function displayResult(title, result) {
+    const resultsDiv = document.getElementById('results');
+    let div = document.createElement('div');
+    div.innerHTML = `<strong>${title}</strong> ${result !== null ? result : 'None'}`;
+    resultsDiv.appendChild(div);
+}
+
+function findSmallestCommonElement(array1, array2) {
+    let commonElements = array1.filter(value => array2.includes(value));
+    if (commonElements.length === 0) return null;
+    return Math.min(...commonElements);
+}
+
+function bubbleSort(array) {
+    let n = array.length;
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                let temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+    return array;
+}
+
+        </script>
+    </div>
+    <div class="zadanya2">
+        <h1>Програма-будильник</h1>
+        <label for="alarmTime">Введіть дату та час будильника:</label>
+        <input type="datetime-local" id="alarmTime">
+        <button id="setAlarm">Увімкнути будильник</button>
+        <button id="cancelAlarm">Вимкнути будильник</button>
+        <p id="message"></p>
+    
+        <script>
+            let alarmTimeout;
+    
+            document.getElementById('setAlarm').addEventListener('click', function() {
+                const alarmTime = document.getElementById('alarmTime').value;
+                if (!alarmTime) {
+                    alert('Будь ласка, введіть дату та час.');
+                    return;
+                }
+                
+                const alarmDate = new Date(alarmTime);
+                const now = new Date();
+    
+                const timeToAlarm = alarmDate - now;
+    
+                if (timeToAlarm <= 0) {
+                    alert('Введіть майбутню дату та час.');
+                    return;
+                }
+    
+                document.getElementById('message').textContent = 'Будильник увімкнено!';
+                
+                alarmTimeout = setTimeout(() => {
+                    alert('Час спрацювання будильника!');
+                    document.getElementById('message').textContent = '';
+                }, timeToAlarm);
+            });
+    
+            document.getElementById('cancelAlarm').addEventListener('click', function() {
+                clearTimeout(alarmTimeout);
+                document.getElementById('message').textContent = 'Будильник вимкнено.';
+            });
+        </script>
+    </div>
+
+    <div class="code-block">
+        <h1>Код Завдання 1</h1>
+        <pre><code>
+            function performOperations() {
+                const size = parseInt(document.getElementById('size').value);
+                if (isNaN(size) || size < 1) {
+                    alert('Будь ласка, введіть допустиме число більше 0.');
+                    return;
+                }
+            
+                let array1 = generateRandomArray(size);
+                let array2 = generateRandomArray(size);
+            
+                displayArray('Масив 1:', array1);
+                displayArray('Масив 2:', array2);
+            
+                let smallestCommonElement = findSmallestCommonElement(array1, array2);
+                displayResult('Найменший спільний елемент:', smallestCommonElement);
+            
+                let sortedArray1 = bubbleSort([...array1]);
+                displayArray('Відсортований Масив 1:', sortedArray1);
+            
+                let sortedArray2 = bubbleSort([...array2]);
+                displayArray('Відсортований Масив 2:', sortedArray2);
+            }
+            
+            function generateRandomArray(size) {
+                let array = [];
+                for (let i = 0; i < size; i++) {
+                    array.push(Math.floor(Math.random() * 100));
+                }
+                return array;
+            }
+            
+            function displayArray(title, array) {
+                const resultsDiv = document.getElementById('results');
+                let div = document.createElement('div');
+                div.innerHTML = `<strong>${title}</strong> ${array.join(', ')}`;
+                resultsDiv.appendChild(div);
+            }
+            
+            function displayResult(title, result) {
+                const resultsDiv = document.getElementById('results');
+                let div = document.createElement('div');
+                div.innerHTML = `<strong>${title}</strong> ${result !== null ? result : 'None'}`;
+                resultsDiv.appendChild(div);
+            }
+            
+            function findSmallestCommonElement(array1, array2) {
+                let commonElements = array1.filter(value => array2.includes(value));
+                if (commonElements.length === 0) return null;
+                return Math.min(...commonElements);
+            }
+            
+            function bubbleSort(array) {
+                let n = array.length;
+                for (let i = 0; i < n - 1; i++) {
+                    for (let j = 0; j < n - i - 1; j++) {
+                        if (array[j] > array[j + 1]) {
+                            let temp = array[j];
+                            array[j] = array[j + 1];
+                            array[j + 1] = temp;
+                        }
+                    }
+                }
+                return array;
+            }            
+        </code></pre>
+    </div>
+
+    <div class="code-block">
+        <h1>Код Завдання 2</h1>
+        <pre><code>
+            let alarmTimeout;
+    
+            document.getElementById('setAlarm').addEventListener('click', function() {
+                const alarmTime = document.getElementById('alarmTime').value;
+                if (!alarmTime) {
+                    alert('Будь ласка, введіть дату та час.');
+                    return;
+                }
+                
+                const alarmDate = new Date(alarmTime);
+                const now = new Date();
+    
+                const timeToAlarm = alarmDate - now;
+    
+                if (timeToAlarm <= 0) {
+                    alert('Введіть майбутню дату та час.');
+                    return;
+                }
+    
+                document.getElementById('message').textContent = 'Будильник увімкнено!';
+                
+                alarmTimeout = setTimeout(() => {
+                    alert('Час спрацювання будильника!');
+                    document.getElementById('message').textContent = '';
+                }, timeToAlarm);
+            });
+    
+            document.getElementById('cancelAlarm').addEventListener('click', function() {
+                clearTimeout(alarmTimeout);
+                document.getElementById('message').textContent = 'Будильник вимкнено.';
+            });
+        </code></pre>
+    </div>
+</body>
+</html>
